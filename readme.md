@@ -27,24 +27,20 @@ cd empathetic-code-reviewer
 
 2. Install dependencies:
 
-```bash
 npm install
 
 3. Create a .env file and add your OpenAI API key:
 For now just rename .env.sample to .env. 
 Everything will run fine 
 
-```bash
 OPENAI_API_KEY=your_openai_api_key
 
 4. Start the server:
 
-```bash
 npm run dev 
 
 or 
 
-```bash
 node index.js
 
 5. Open index.html in public folder in your browser
