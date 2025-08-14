@@ -22,16 +22,14 @@ A web application that provides **empathetic, constructive, and code-aware revie
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/empathetic-code-reviewer.git
-cd empathetic-code-reviewer
+git clone https://github.com/VatsalMargi/darwix.git
+cd darwix
 
 2. Install dependencies:
 
 npm install
 
 3. Create a .env file and add your OpenAI API key:
-For now just rename .env.sample to .env. 
-Everything will run fine 
 
 OPENAI_API_KEY=your_openai_api_key
 
