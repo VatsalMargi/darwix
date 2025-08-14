@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Empathetic Code Reviewer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Highlight.js for code syntax highlighting -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <style>
+    pre {
+      background-color: #1e1e1e;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
+  <h1 class="text-2xl font-bold mb-4">Empathetic Code Reviewer</h1>
+
+  <div class="bg-white p-6 rounded shadow w-full max-w-3xl space-y-4">
+    <textarea id="code" placeholder="Paste your code snippet here..."
+      class="w-full border p-2 rounded h-40 font-mono"></textarea>
+
+    <textarea id="comments" placeholder="Enter review comments, one per line..."
+      class="w-full border p-2 rounded h-32"></textarea>
+
+    <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Generate Empathetic Review
+    </button>
+
+    <div id="output" class="mt-4 prose prose-invert max-w-none"></div>
+  </div>
+
+  <script>
+    marked.setOptions({
+      highlight: function (code, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+          return hljs.highlight(code, { language: lang }).value;
+        }
+        return hljs.highlightAuto(code).value;
+      }
+    });
+
+    document.getElementById("submitBtn").addEventListener("click", async () => {
+      const code = document.getElementById("code").value;
+      const comments = document.getElementById("comments").value.split("\n").filter(Boolean);
+
+      document.getElementById("output").innerHTML = "<p>Generating review...</p>";
+
+      try {
+        const res = await fetch("http://localhost:3000/review", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code_snippet: code, review_comments: comments })
+        });
+
+        const data = await res.json();
+        if (data.markdown) {
+          document.getElementById("output").innerHTML = marked.parse(data.markdown);
+        } else {
+          document.getElementById("output").innerHTML = "<p class='text-red-500'>Error generating review.</p>";
+        }
+      } catch (err) {
+        document.getElementById("output").innerHTML = "<p class='text-red-500'>Request failed.</p>";
+      }
+    });
+  </script>
+</body>
+</html>
